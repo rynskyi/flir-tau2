@@ -6,7 +6,7 @@ int main()
 {
     printf("Main:\n");
     TauCam cam = TauCam();
-    cam.setPalette(3);
-    cam.setPalette(7);
     cam.setPalette(9);
+    cam.setZoom(TAU_ZOOM_8X);
+    cam.setSpotMeter(TAU_SPOTMETER_ON_C);
 }
