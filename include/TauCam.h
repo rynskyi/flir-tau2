@@ -44,6 +44,9 @@
 
 
 class TauCam : TauCamBase {
+
+using TauCamBase::TauCamBase;
+
 public:
     void setPalette(uint8_t paletteNum);
     void setZoom(uint8_t zoomMode);

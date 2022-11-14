@@ -6,11 +6,21 @@
 
 class TauCamBase {
 private:
+    // properies
+    void (*serialWriteByte)(uint8_t);
+    uint8_t (*serialReadByte)();
+    uint32_t (*serialAvailableBytes)();
+    // methods
     void read();
     void write(const void *pBuf, uint32_t len);
     uint16_t crc16(uint8_t *pBlock, uint16_t len);
+
 protected:
     void sendCommand(uint8_t cmd, const void *pArgs, uint16_t argsLen);
 public:
-    TauCamBase();
+    TauCamBase(
+        void (*writeByte)(uint8_t),
+        uint8_t (*readByte)() = NULL,
+        uint32_t (*availableBytes)() = NULL
+    );
 };

@@ -3,29 +3,25 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "Tserial.h"
-
-Tserial *com;
-
-TauCamBase::TauCamBase() {
-    // dev
-    com = new Tserial();
-    int err = com->connect("\\\\.\\COM13", 57600, spNONE);
-    if (err) {
-        printf("COM Connection error: %d\n", err);
-    } else {
-        printf("COM Connection Ok\n");
-    }
-}
+TauCamBase::TauCamBase(
+    void (*writeByte)(uint8_t),
+    uint8_t (*readByte)(),
+    uint32_t (*availableBytes)()
+) {
+    TauCamBase::serialWriteByte = writeByte;
+    TauCamBase::serialReadByte = readByte;
+    TauCamBase::serialAvailableBytes = availableBytes;
+};
 
 void TauCamBase::write(const void *pBuf, uint32_t len) {
     // print to stdout for dev
     printf("Send HEX\n");
     for (uint32_t i = 0; i < len; i++) {
-        printf("0x%02X ", *((uint8_t*)pBuf+i));
+        uint8_t byte = *((uint8_t*)pBuf+i);
+        printf("0x%02X ", byte);
+        TauCamBase::serialWriteByte(byte);
     }
     printf("\n\n");
-    com->sendArray((char*)pBuf, len);
 }
 
 // calc CRC16 checksum. Polynomial = 0x1021, Initial Value = 0x0
