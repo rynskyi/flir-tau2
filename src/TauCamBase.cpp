@@ -1,30 +1,39 @@
 #include "TauCamBase.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
 #include <string.h>
 
-#define LSB(X) X & 0xFF
-#define MSB(X) X >> 8
+#include "Tserial.h"
+
+Tserial *com;
 
 TauCamBase::TauCamBase() {
-    //
+    // dev
+    com = new Tserial();
+    int err = com->connect("\\\\.\\COM13", 57600, spNONE);
+    if (err) {
+        printf("COM Connection error: %d\n", err);
+    } else {
+        printf("COM Connection Ok\n");
+    }
 }
 
 void TauCamBase::write(const void *pBuf, uint32_t len) {
     // print to stdout for dev
+    printf("Send HEX\n");
     for (uint32_t i = 0; i < len; i++) {
         printf("0x%02X ", *((uint8_t*)pBuf+i));
     }
-    printf("\n");
+    printf("\n\n");
+    com->sendArray((char*)pBuf, len);
 }
 
 // calc CRC16 checksum. Polynomial = 0x1021, Initial Value = 0x0
-uint16_t TauCamBase::crc16(uint8_t *pcBlock, uint16_t len) {
+uint16_t TauCamBase::crc16(uint8_t *pBlock, uint16_t len) {
     uint16_t crc = 0x0;
     uint8_t i;
     while (len--) {
-        crc ^= *pcBlock++ << 8;
+        crc ^= *pBlock++ << 8;
         for (i = 0; i < 8; i++)
             crc = crc & 0x8000 ? (crc << 1) ^ 0x1021 : crc << 1;
     }
@@ -59,4 +68,5 @@ void TauCamBase::sendCommand(uint8_t cmd, const void *pArgs = NULL, uint16_t arg
 
     // write package
     this->write(pPack, packLen);
+    free(pPack);
 };
