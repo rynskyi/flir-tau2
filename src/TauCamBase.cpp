@@ -42,7 +42,7 @@ uint32_t TauCamBase::read() {
     // read from serial to buffer
     uint32_t len = 0;
     while (TauCamBase::available() && len < TAU_RES_BUF_LEN) {
-        TauCamBase::buffer[len] = TauCamBase::read();
+        TauCamBase::buffer[len] = TauCamBase::serialReadByte();
         len++;
     }
     // dev debug
