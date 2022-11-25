@@ -48,12 +48,13 @@ class TauCam : TauCamBase {
 using TauCamBase::TauCamBase;
 
 public:
+    using TauCamBase::sendCommand;
+
     void setPalette(uint8_t paletteNum);
     void setZoom(uint8_t zoomMode);
     void setSpotMeter(uint8_t mode);
     void setOrientation(uint8_t orientMode);
     void setVideoStandart(uint8_t standart);
-    void drawSymbol();
     
     void printText(
         const char *text, 

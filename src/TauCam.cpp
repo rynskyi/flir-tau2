@@ -92,25 +92,3 @@ void TauCam::drawRectangle(
     TauCam::sendCommand(TAU_CMD_SYMBOL, args, argsLen);
     free(args);
 };
-
-void TauCam::drawSymbol() {
-    // test
-    // uint8_t args[] = {
-    //     0x00, 0x48,     // Bytes 0-1: Symbol Number (0-99)
-    //     0x00, 0x02,     // Bytes 2-3: Symbol Type (Rectangle=1, Text=2, Bitmap=3)
-    //     0x00, 0xFF,     // Bytes 4-5: X-coord
-    //     0x00, 0xFF,     // Bytes 6-7: Y-coord
-    //     0x00, 0x01,     // Bytes 8-9: Width (rectangle) or Alignment (text)
-    //     0x01, 0xFF,     // Bytes 10-11: Height (rectangle) or  Font (text)
-    //     0x00, 0x01,     // Bytes 12-13: Background Color and Foreground Color
-    //     0x48, 0x48,     // Bytes 14-45: Optional data
-    // };
-    // // uint8_t paint[] = {0x00, 0x02};
-    // // uint8_t write[] = {0x00, 0x03};
-    // // uint8_t freez[] = {0x00, 0x00};
-    // TauCam::sendCommand(TAU_CMD_SYMBOL, &args, sizeof(args));
-    // // Sleep(100);
-    // // TauCam::sendCommand(TAU_CMD_SYMBOL, &paint, sizeof(paint));
-    // // TauCam::sendCommand(TAU_CMD_SYMBOL, &write, sizeof(write));
-    // // TauCam::sendCommand(TAU_CMD_SYMBOL, &freez, sizeof(freez));
-};

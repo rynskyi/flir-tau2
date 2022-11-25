@@ -4,14 +4,14 @@
 #include <string.h>
 
 
-// only for debug
+// debug print hex buffer to console
 void printHexBuf(const char *title, const void *pBuf, uint32_t len) {
-    printf("%s\n", title);
-    for (uint32_t i = 0; i < len; i++) {
-        uint8_t byte = *((uint8_t*)pBuf+i);
-        printf("0x%02X ", byte);
-    }
-    printf("\n\n");
+    // printf("%s\n", title);
+    // for (uint32_t i = 0; i < len; i++) {
+    //     uint8_t byte = *((uint8_t*)pBuf+i);
+    //     printf("0x%02X ", byte);
+    // }
+    // printf("\n\n");
 }
 
 TauCamBase::TauCamBase(
@@ -67,13 +67,13 @@ uint16_t TauCamBase::crc16(uint8_t *pBlock, uint16_t len) {
 }
 
 // Build package structure and write to camera
-uint8_t TauCamBase::sendCommand(uint8_t cmd, const void *pArgs = NULL, uint16_t argsLen = 0) {
+uint8_t TauCamBase::sendCommand(uint8_t cmd, const void *pArgs, uint16_t argsLen) {
 
     // allocate memory size = (header = 8b) + (arguments = Nb) + (CRC2 = 2b)
-    uint16_t packLen = 8 + argsLen + (argsLen ? 2 : 0);
+    uint16_t packLen = 8 + argsLen + 2;
     uint8_t *pPack = (uint8_t*) calloc(packLen, 1);
     
-    // build package 8b standert structure
+    // build package 8b standart structure
     pPack[0] = 0x6E;                    // 0x6E on all valid incoming and reply  messages
     pPack[1] = 0x00;                    // status (not used on send)
     pPack[2] = 0x00;                    // not used
@@ -95,10 +95,16 @@ uint8_t TauCamBase::sendCommand(uint8_t cmd, const void *pArgs = NULL, uint16_t 
     // write package
     this->write(pPack, packLen);
     free(pPack);
+    
+    // wait to cam process command 
     TauCamBase::serialDelay(50);
+
+    // read response and return status code 
     return TauCamBase::readResponse();
 };
 
+
+// Read and parse response
 uint8_t TauCamBase::readResponse() {
     uint32_t len = TauCamBase::read();
     uint8_t *pBuf = TauCamBase::buffer;

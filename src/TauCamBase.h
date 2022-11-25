@@ -6,7 +6,7 @@
 
 #define TAU_RES_BUF_LEN 128
 
-// TAU Success/Error responses
+// TAU Success/Error codes
 #define TAU_OK                          0x00
 #define TAU_RANGE_ERROR                 0x03
 #define TAU_CHECKSUM_ERROR              0x04
@@ -16,7 +16,7 @@
 #define TAU_BYTE_COUNT_ERROR            0x09
 #define TAU_FEATURE_NOT_ENABLED         0x0A
 
-// Tau Castom Error response
+// Lib custom Error codes
 #define TAU_RES_ERR_LEN                 0xF1
 #define TAU_RES_ERR_INVALID             0xF1
 #define TAU_RES_ERR_CRC                 0xF3
@@ -37,9 +37,8 @@ private:
     uint32_t available();
     uint32_t read();
     void write(const void *pBuf, uint32_t len);
-
 protected:
-    uint8_t sendCommand(uint8_t cmd, const void *pArgs, uint16_t argsLen);
+    uint8_t sendCommand(uint8_t cmd, const void *pArgs = NULL, uint16_t argsLen = 0);
     uint8_t readResponse();
 public:
     TauCamBase(
